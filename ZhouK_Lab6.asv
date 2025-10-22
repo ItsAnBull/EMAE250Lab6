@@ -26,12 +26,8 @@ for i = 2:rows
     
 end
 
-% define the child matrix
 child_Astar = Astar(2:rows,2:cols);
 
-% make the recursive call on the child matrix
-child_Astar(:,1:cols-2)
-child_Astar(:,cols-1)
-%ZhouK_Lab6(child_Astar(:,1:cols-2),child_Astar(:,cols-1));
+ZhouK_Lab6
 
 
