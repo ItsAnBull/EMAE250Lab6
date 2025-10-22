@@ -1,33 +1,48 @@
 function x = ZhouK_Lab6(A, b)
 
-% concatenate the b matrix to the end of the A matrix
-Astar = horzcat(A, b);
-
-% identify the index of the row to row swap
-[~, pivot_target] = max(abs(Astar(:,1)));
-
-% perform partial pivoting
-temp = Astar(pivot_target,:);
-Astar(pivot_target,:) = Astar(1,:);
-Astar(1,:) = temp;
-
-
 % calculate the number of rows of the matrix
-[rows, cols] = size(Astar);
+[rows, ~] = size(A);
 
-% perform row ops for each row of the matrix
-for i = 2:rows
+% check to see if the system is a first order system
+if (rows == 1)
 
-    % calculate the row factor
-    fac = Astar(i,1) / Astar(1,1);
-    
-    % perform the elimination
-    Astar(i,:) = Astar(i,:) - fac*Astar(1,:);
-    
+    % if the system is a first order system, solve for x
+    x = A \ b;
+
+else
+
+    % concatenate the b matrix to the end of the A matrix
+    Astar = horzcat(A, b);
+
+    % update the cols value accordingly
+    cols = rows + 1;
+
+    % identify the index of the row to row swap
+    [~, pivot_target] = max(abs(Astar(:,1)));
+
+    % perform partial pivoting
+    temp = Astar(pivot_target,:);
+    Astar(pivot_target,:) = Astar(1,:);
+    Astar(1,:) = temp;
+
+    % perform row ops for each row of the matrix
+    for i = 2:rows
+
+        % calculate the row factor
+        fac = Astar(i,1) / Astar(1,1);
+
+        % perform the elimination
+        Astar(i,:) = Astar(i,:) - fac*Astar(1,:);
+
+    end
+
+    % define the child matrix
+    child_Astar = Astar(2:rows,2:cols);
+
+    % make the recursive call on the child matrix
+    child_Astar(:,1:cols-2);
+    child_Astar(:,cols-1);
+    x = [x,ZhouK_Lab6(child_Astar(:,1:cols-2),child_Astar(:,cols-1))]
+
 end
-
-child_Astar = Astar(2:rows,2:cols);
-
-ZhouK_Lab6
-
 
