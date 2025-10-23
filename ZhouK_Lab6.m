@@ -1,5 +1,9 @@
 function x = ZhouK_Lab6(A, b)
 
+% display A and b
+disp(A);
+disp(b);
+
 % calculate the number of rows of the matrix
 [rows, ~] = size(A);
 
@@ -38,11 +42,20 @@ else
 
     % define the child matrix
     child_Astar = Astar(2:rows,2:cols);
+    
+    % define the x_child vector as the solution vector x for the new A and 
+    % b vectors to be passed into the child
+    A_child = child_Astar(:,1:cols-2);
+    b_child = child_Astar(:,cols-1);
+    x_child = ZhouK_Lab6(A_child, b_child);
 
-    % make the recursive call on the child matrix
-    child_Astar(:,1:cols-2);
-    child_Astar(:,cols-1);
-    x = vertcat(ZhouK_Lab6(child_Astar(:,1:cols-2),child_Astar(:,cols-1)),x)
+    % define the next x term to insert into the solution vector as this
+    % math, which is essentially just solving the equation for the next
+    % term
+    x_calculate = (Astar(1,cols) - dot(Astar(1,1:cols-1),horzcat([0], transpose(x_child)))) / Astar(1,1);
+    
+    % define the solution vector
+    x = [x_calculate; x_child];
 
 end
 

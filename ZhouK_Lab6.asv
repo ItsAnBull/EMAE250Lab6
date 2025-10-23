@@ -7,7 +7,7 @@ function x = ZhouK_Lab6(A, b)
 if (rows == 1)
 
     % if the system is a first order system, solve for x
-    x = A \ b;
+    x = [A \ b];
 
 else
 
@@ -42,7 +42,12 @@ else
     % make the recursive call on the child matrix
     child_Astar(:,1:cols-2);
     child_Astar(:,cols-1);
-    x = [x,ZhouK_Lab6(child_Astar(:,1:cols-2),child_Astar(:,cols-1))]
+
+    x_child = ZhouK_Lab6(child_Astar(:,1:cols-2),child_Astar(:,cols-1));
+
+    x_calculate = (Astar(1,cols) - dot(Astar(1,1:cols-1),horzcat([0], transpose(x_child)))) / Astar(1,1);
+
+    x = [x_calculate; x_child];
 
 end
 
